@@ -1,0 +1,50 @@
+C++ 1978 Bjarne Stroustrup
+
+deque (middle-loaded array):
+    - front/back (get element: no delete); push_back/front; pop_back/front (delete only); size/empty; insert/erase;
+
+vector (front-loaded array):
+    - front/back; push/pop_back (NO push/pop_front); size/empty;
+
+list :
+    - front/back; size/empty; push/pop_front (insert/delete); push/pop_back;
+
+iostream:
+    - NOT copyable
+    - cin >> i stores input from keyboard into i
+    - cout << i feeds i into output
+
+    - i/ostringstream: acts as iostream AND string
+
+exceptions:
+  - throwing always throws copies
+  - we want to catch by address (catch Mammal& e)
+
+pointer/reference:
+  - int* p = v; p now points to v
+  - const int* p = read-only pointer; many location
+  - int* const p = read/write pointer; one location
+  - const int* const p = read-only pointer; one location
+  - const int& p = read-only; one location
+  - if you pointer a pointer to an array, the pointer just points to that place in memory 
+
+pre/post-increment:
+  - pre-increment returns an l-value
+  - post-increment returns an r-value
+
+iterators:
+  - input iterator - ++, !=, * (read only)
+  - output iterator - ++, * (write only)
+  - forward iterator - ++, !=, * (read/write)
+  - bidirectional iterator - ++, --, !=, * (read/write)
+  - random access iterator - ++, --, !=, *, [], +/- int
+
+
+classes:
+  - get default/copy/copy assignment/destructor for free
+  - if you define a single constructor, you must re-define default constructor again
+  - can use template <typename t1, typename t2...> to make general class definition
+    - different typename for each different TYPE of parameter
+
+functions:
+  equal(T1 i1, T1 i2, T2 j1) - compares elements in range [i1, i2) with range beginning at j1
