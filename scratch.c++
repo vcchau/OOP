@@ -2,6 +2,8 @@
 #include <iostream>
 #include <stdio.h>
 #include <assert.h>
+#include <list>
+#include <cmath>
 
 using namespace std;
 
@@ -133,6 +135,130 @@ cout << a[0] << " ";
 cout << a[1] << " ";
 cout << a[2] << endl;}
 
+int& f1(int& r) {
+  ++r;
+  return r;
+}
+
+int& f2(int& r) {
+  ++r;
+  return r;
+}
+
+void quiz7() {
+  int i = 2;
+  int j = f1(i);
+  cout << i << " ";
+  cout << (&i == &j) << endl;  // 0 false
+  cout << j << endl;  // 3
+  // cout << *j << endl;  Does not compile error: indirection requires pointer operand ('int' invalid)
+}
+
+void quiz8() {
+  int i = 2;
+  int& j = f1(i);
+  cout << i << " ";
+  cout << (&i == &j) << endl;  // 1 true
+  cout << j << endl;  // 3
+  // cout << j << endl;
+  // cout << *j << endl;  Does not compile error: indirection requires pointer operand ('int' invalid)
+}
+
+template <typename T>
+T my_add (const T& x, const T& y) {
+  return x + y;
+}
+
+template <typename T>
+struct my_add_struct {
+  T operator () (const T& x, const T& y) {
+    return x + y;
+  }
+};
+
+template <typename T>
+class my_add_class {
+  private:
+    T _y;
+
+  public:
+    my_add_class (T y) :
+      _y (y) {}
+
+    T operator () (const T& x) const {
+      return x + _y;
+    }
+};
+
+template <typename T>
+T my_square (const T& x, const T& y) {
+  return pow(x, y);
+}
+
+template <typename I1, typename I2, typename F>
+I2 my_transform (I1 b, I1 e, I2 start, F f) {
+  while (b != e) {
+    *start = f(*b);
+    ++b;
+    ++start;
+  }
+  return start;
+}
+
+template <typename T>
+class my_pow {
+private:
+  T _n;
+
+public:
+  my_pow (const T& x) :
+  _n (x) {}
+
+  T operator () (const T& y) const {
+    return pow(y, _n);
+  }
+};
+
+void my_transform_test() {
+  const function <int (int, int)> f = my_add<int>;
+  int x = 1;
+  int y = 2;
+  int z = f(1, 2);
+
+  const function <int (int, int)> g = my_add_struct<int>();
+  int j = g(10, y);
+  cout << "j: " << j << endl;
+
+  const function <int (int)> h = my_add_class<int>(y);
+  int n = h(x); // x + y = 3
+  int apple = h(100);
+  cout << "n: " << n << endl;
+  cout << "apple: " << apple << endl;
+
+  const function <int (int)> power = my_pow<int>(3);
+  int eight = power(y);
+
+  cout << "eight: " << eight << endl;
+
+  // const function <int (int, int)> g = my_square<int>(2);
+  list<int> l = {1, 2, 3, 4};
+  list<int>::iterator b = begin(l);
+  list<int>::iterator e = end(l);
+  list<int> res(10, 0);
+  my_transform(b, e, begin(res), power);
+  for (int n : l) {
+    cout << n << " ";
+  }
+  cout << endl;
+
+  for (int n : res) {
+    cout << n << " ";
+  }
+  cout << endl;
+}
+
+
+
 int main() {
   using namespace std;
   // pointers();
@@ -140,5 +266,8 @@ int main() {
   // reference();
   // arrays();
   //test1();  // Quiz 11 -> 12 8 2 4 4
-  //test2();    // Quiz 11 Q3 -> 12 8 2 4 4
+  // test2();    // Quiz 11 Q3 -> 12 8 2 4 4
+  // quiz7();
+  // quiz8();
+  my_transform_test();
 }
