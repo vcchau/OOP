@@ -48,6 +48,10 @@ iterators:
   - forward iterator - ++, !=, * (read/write)
   - bidirectional iterator - ++, --, !=, * (read/write)
   - random access iterator - ++, --, !=, *, [], +/- int
+  - use set<type>::iterator::value_type for getting the vlues of sets 
+  - or use const int& when using a for each loop for (const int& r : set)
+    ** when using reference & it must be const ** 
+  - use pair<type1, type2> for maps : the value is pair.second 
 
 
 classes:
@@ -59,16 +63,43 @@ classes:
 functions:
   ** use const refs to variables to reduce copying and save space 
     ex: my_multiply (const T& x, const T& y) **
-  equal(T1 i1, T1 i2, T2 j1) - compares elements in range [i1, i2) with range beginning at j1
-  T2 my_copy(T1 b, T1 e, T2 v) - copies elements from range [b, e) to v and returns position of v 
-  friend bool operator == (const RangeIterator&, const RangeIterator&)
-  pre-increment = RangeIterator& operator ++ ();
-  post-increment = RangeIterator operator ++ ();
-  template <typename T1, typename T2> bool my_equal(T1 i1, T1 i2, T2 j1);
-  template <typename T, typename V> void my_fill(T start, T end, const V& value)
-  int post_incr(int& i);
-  int& pre_incr(int& i);
-  T x = accumulate(b, e, v, my_multiplies<T>); // BF -> function<T (T, T)>
+  - equal(T1 i1, T1 i2, T2 j1) - compares elements in range [i1, i2) with range beginning at j1
+  - T2 my_copy(T1 b, T1 e, T2 v) - copies elements from range [b, e) to v and returns position of v 
+  - friend bool operator == (const RangeIterator&, const RangeIterator&)
+  - pre-increment = RangeIterator& operator ++ ();
+  - post-increment = RangeIterator operator ++ ();
+  - template <typename T1, typename T2> bool my_equal(T1 i1, T1 i2, T2 j1);
+  - template <typename T, typename V> void my_fill(T start, T end, const V& value)
+  - int post_incr(int& i);
+  - int& pre_incr(int& i);
+  - T x = accumulate(b, e, v, my_multiplies<T>); // BF -> function<T (T, T)>
+  - transform(b, e, x, f);
+    applies function f to range [b, e) and places result into x, returns last position of x like my_copy does 
+    *** must specify other parameters of f if it takes more than 1 arg 
+        function f form can either be:
+        template <typename T>
+        T function (const T& arg1, arg2, ...); --> const function<T, (T)> f = function<type T>;
+
+        or 
+
+        template <typename T>
+        struct function {
+          T operator () (const T& arg1, arg2, ...) const; --> const function<T, (T)> f = function<type T>();
+        }
+
+        or 
+
+        template <typename T>
+        class function {
+          private: 
+            T _n;
+
+          public:
+            function (T n) :
+              _n (n) {}
+
+            T operator () (const T& arg1, arg2, ...) const; -->     const function<int (int)> f = function<int>(2);
+        };
 
 
 inheritance/composition:
