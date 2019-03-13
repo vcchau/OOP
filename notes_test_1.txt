@@ -9,6 +9,16 @@ vector (front-loaded array):
 list :
     - front/back; size/empty; push/pop_front (insert/delete); push/pop_back;
 
+set/map (red-black binary search tree) :
+
+unordered set/map (hash-table) :
+
+queue (FIFO backed by deque (default) or list) :
+
+priority queue (binary heap mapped onto a vector or deque) :
+
+stack (LIFO backed by deque (default), vector, or list) :
+
 iostream:
     - NOT copyable
     - cin >> i stores input from keyboard into i
@@ -47,4 +57,56 @@ classes:
     - different typename for each different TYPE of parameter
 
 functions:
+  ** use const refs to variables to reduce copying and save space 
+    ex: my_multiply (const T& x, const T& y) **
   equal(T1 i1, T1 i2, T2 j1) - compares elements in range [i1, i2) with range beginning at j1
+  T2 my_copy(T1 b, T1 e, T2 v) - copies elements from range [b, e) to v and returns position of v 
+  friend bool operator == (const RangeIterator&, const RangeIterator&)
+  pre-increment = RangeIterator& operator ++ ();
+  post-increment = RangeIterator operator ++ ();
+  template <typename T1, typename T2> bool my_equal(T1 i1, T1 i2, T2 j1);
+  template <typename T, typename V> void my_fill(T start, T end, const V& value)
+  int post_incr(int& i);
+  int& pre_incr(int& i);
+  T x = accumulate(b, e, v, my_multiplies<T>); // BF -> function<T (T, T)>
+
+
+inheritance/composition:
+  - class stack : public vector {...} is the same as (stack extends vector) in java 
+  - prefer this:
+      template <typename T>
+      class stack {
+        private:
+          vector<T> _v;
+      }
+
+    template <typename T, typename C = deque<T>>
+    my_stack {
+          my_stack () = default;
+          my_stack (const C& c):
+          size_t size() const;
+          bool empty() const;
+          void push(const T& t);
+          const T& top() const;
+          T& top();
+          void pop();
+    }
+
+    template <typename T>
+    class RangeIterator {
+          friend bool operator == (const RangeIterator& lhs, const RangeIterator& rhs);
+          T operator * () const;
+          bool operator == (const RangeIterator& v) const;
+          bool operator != (const RangeIterator& v) const;
+          RangeIterator& operator ++ ();
+          RangeIterator operator ++ (int);
+    }
+
+    template <typename T>
+    class Range {
+          Range (T b, T e);
+          *** INCLUDE CLASS RangeIterator renamed as 'iterator' here ***
+          iterator begin() const;
+          iterator end() const;
+    };
+
